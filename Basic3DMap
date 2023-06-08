@@ -1,0 +1,105 @@
+# This code comes under the assumption that I am using data from a csv file called 'Dose.csv' 
+
+# This is a pretty simple code for turning the X, Y, Z, and dose data columns in a typical CSV from TOPAS into a 3D model/heat map type of thing
+
+import pandas as pd
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+# Read the CSV file
+data = pd.read_csv('Dose.csv')
+
+# Extract x, y, z, and dose columns from the CSV
+x = data['X']
+y = data['Y']
+z = data['Z']
+dose = data['Dose']
+
+# Create a 3D figure
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+# Plot the dose distribution
+ax.scatter(x, y, z, c=dose, cmap='jet')
+
+# Set labels and title
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
+ax.set_title('3D Dose Distribution')
+
+# Add a colorbar
+cbar = fig.colorbar(ax.scatter(x, y, z, c=dose, cmap='jet'))
+cbar.set_label('Dose')
+
+# Show the plot
+plt.show()
+
+--------------------------------------------
+
+# This one is pretty much the same thing, but I put in an important filter and changed the data extracting to the filtered data to eliminate dose values of 0
+
+import pandas as pd
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+# Read the CSV file
+data = pd.read_csv('Dose.csv')
+
+# Filter out points with dose value of 0
+filtered_data = data[data['Dose'] != 0]
+
+# Extract x, y, z, and dose columns
+x = filtered_data['X']
+y = filtered_data['Y']
+z = filtered_data['Z']
+dose = filtered_data['Dose']
+
+# Create a 3D figure
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+
+# Plot the dose distribution
+ax.scatter(x, y, z, c=dose, cmap='jet')
+
+# Set labels and title
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
+ax.set_title('3D Dose Distribution')
+
+# Add a colorbar
+cbar = fig.colorbar(ax.scatter(x, y, z, c=dose, cmap='jet'))
+cbar.set_label('Dose')
+
+# Show the plot
+plt.show()
+
+
+# On this model it could also be beneficial to edit the filter to leave out different values
+# I used some >, <, etc. functions to eliminate the data I did not want
+
+------------------------------------------
+
+# How to make a simple histogram from a single column of data in a csv file ('BiggerDose.csv' and column->'Dose')
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Read the csv file using pandas
+data = pd.read_csv('BiggerDose.csv')
+
+# Extract the specific column data that you want
+dose_data = data['Dose']
+
+# Create the histogram
+plt.hist(dose_data, bins=10, edgecolor='blue')
+
+# Add some axis titles and everything
+plt.xlabel('Dose')
+plt.ylabel('# of Voxels')
+plt.title('Histogram of Dosage')
+
+# Produce the plot
+plt.show()
+
