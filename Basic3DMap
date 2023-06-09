@@ -104,3 +104,43 @@ plt.title('Histogram of Dosage')
 plt.show()
 
 -----------------------------------------
+
+# Here is my 2D 'Heat Map' of the data taken from the X plane where the beam is impacting orthogonally
+# Note: make sure the set value of the plane is a location that is being scored and has values 
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Read the CSV file
+data = pd.read_csv('Water.csv')
+
+# Set the desired z-value to keep constant
+constant_x = 2.0
+
+# Filter the data based on the desired z-value
+subset = data[data['X'] == constant_x]
+
+# Extract x, y, and dose columns for the constant z-value
+z = subset['Z']
+y = subset['Y']
+dose = subset['Dose']
+
+# Reshape the data for a 2D plot
+grid_size = int(len(z) ** 0.5)
+z = z.values.reshape((grid_size, grid_size))
+y = y.values.reshape((grid_size, grid_size))
+dose = dose.values.reshape((grid_size, grid_size))
+
+# Create a 2D plot
+plt.imshow(dose, cmap='jet', origin='lower', extent=[z.min(), z.max(), y.min(), y.max()])
+plt.colorbar(label='Dose')
+
+# Set labels and title
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.title('2D Dose Distribution (x = {})'.format(constant_x))
+
+# Show the plot
+plt.show()
+
+------------------------------------------
+
