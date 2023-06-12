@@ -144,3 +144,29 @@ plt.show()
 
 ------------------------------------------
 
+# Here is my simple line plot example that will serve as a dose-depth chart for making sure my patterns in different EBRTs were correct
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Read the CSV file
+data = pd.read_csv('Water.csv')
+
+# Extract the x and y values from the CSV data
+x = data['X']
+y = data['Dose']
+
+# Create a line plot
+plt.plot(x, y)
+
+# Set labels and title
+plt.xlabel('Depth')
+plt.ylabel('Dose')
+plt.title('DD')
+
+# Show the plot
+plt.show()
+
+# Even though I only used 10 x-coordinate locations (ie the plot was not smooth), the trends were pretty obviously correct, which was all I wanted to confirm
+
+--------------------------------------------
+
