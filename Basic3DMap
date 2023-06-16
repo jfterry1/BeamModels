@@ -170,3 +170,103 @@ plt.show()
 
 --------------------------------------------
 
+# Here is a combination of most of the helpful figures I need to produce to look at some of the local dose trends that gives the 2D Heat Map, the Percentage Histogram, and spits out some helpful numbers that I like to have 
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Read the CSV file
+data = pd.read_csv('Flat.csv')
+
+# Info I want to have
+# Pick out the column that you want
+column = data['Dose']
+
+# Command the average
+average = column.mean()
+
+# Print the value
+print("Average:", average)
+
+# Count the number of non-zero values
+non_zero_count = (column != 0).sum()
+
+# Print the count
+print("Number of non-zero values:", non_zero_count)
+
+# Want the largest number
+largest_number = max(column)
+
+print("The largest number in the data set is:", largest_number)
+
+# What is the x value of the maximum dose
+# Find the row with the maximum dose
+max_dose_row = data.loc[data['Dose'].idxmax()]
+
+# Get the x-value from the row
+x_value = max_dose_row['X']
+
+# Print the x-value
+print("The x-value at which the maximum dose occurs is:", x_value)
+
+# What is the z value of the maximum dose
+# Find the row with the maximum dose
+max_dose_row = data.loc[data['Dose'].idxmax()]
+
+# Get the x-value from the row
+z_value = max_dose_row['Z']
+
+# Print the x-value
+print("The z-value at which the maximum dose occurs is:", z_value)
+
+# For the Heat Map
+# Set the desired z-value to keep constant
+constant_z = 5.0
+
+# Filter the data based on the desired z-value
+subset = data[data['Z'] == constant_z]
+
+# Extract x, y, and dose columns for the constant z-value
+x = subset['X']
+y = subset['Y']
+dose = subset['Dose']
+
+# Reshape the data for a 2D plot
+grid_size = int(len(x) ** 0.5)
+x = x.values.reshape((grid_size, grid_size))
+y = y.values.reshape((grid_size, grid_size))
+dose = dose.values.reshape((grid_size, grid_size))
+
+# Create a 2D plot
+plt.imshow(dose, cmap='jet', vmin=0, vmax=10e-5, origin='lower', extent=[x.min(), x.max(), y.min(), y.max()])
+plt.colorbar(label='Dose')
+
+# Set labels and title
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.title('2D Dose Distribution (Z = {})'.format(constant_z))
+
+# Set a Dose Scale Limit
+
+
+# Show the plot
+plt.show()
+
+# Calculate the histogram
+hist, bins = np.histogram(column, bins=100, range=(0, 10e-5))
+
+# Calculate the percentage for each bin
+percentage = (hist / len(column)) * 100
+
+# Plot the histogram
+plt.bar(bins[:-1], percentage, width=np.diff(bins), align='edge')
+
+# Set the axis labels and title
+plt.xlabel('Dose')
+plt.ylabel('Percentage of Points')
+plt.title('Dose Distribution Histogram')
+
+# Show the plot
+plt.show()
+
